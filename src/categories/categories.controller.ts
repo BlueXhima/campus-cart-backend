@@ -1,13 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+  UseGuards,
+} from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '../users/entities/user.entity';
 
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.STAFF)
   create(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoriesService.create(createCategoryDto);
   }
@@ -18,17 +34,24 @@ export class CategoriesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoriesService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.categoriesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
-    return this.categoriesService.update(+id, updateCategoryDto);
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.STAFF)
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateCategoryDto: UpdateCategoryDto,
+  ) {
+    return this.categoriesService.update(id, updateCategoryDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoriesService.remove(+id);
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.STAFF)
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.categoriesService.remove(id);
   }
 }
