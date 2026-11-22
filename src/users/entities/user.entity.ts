@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Exclude } from 'class-transformer';
 import { Order } from '../../orders/entities/order.entity';
 
 export enum UserRole {
@@ -21,6 +22,7 @@ export class User {
   email: string;
 
   @Column({ type: 'varchar', length: 255 })
+  @Exclude()
   passwordHash: string;
 
   @Column({
