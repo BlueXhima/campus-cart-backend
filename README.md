@@ -1,4 +1,4 @@
-# Campus Cart — School Merchandise and Bookstore Reserved-and-Pickup System
+# Campus Cart — School Merchandise and Campus Supply Reserved-and-Pickup System
 
 Campus Cart is an ITEC 116 Systems Integration Backend Prototype. Students can browse school merchandise and create cash-on-pickup reservations, while staff manage the catalog inventory and order pickup lifecycle.
 
